@@ -1,0 +1,47 @@
+# ZeroTuning × JailbreakBench — 서버 의존성 (194.68.245.191, A40 48GB)
+# Python 3.11.10 / CUDA 12.4
+#
+# ── 버전 충돌 이력 ────────────────────────────────────────────────
+# [1] torch 2.4.1 → 2.6.0
+#     이유: transformers가 torch.load() 사용 시 CVE-2025-32434 대응으로
+#           v2.6 미만을 거부함 (safetensors 형식이면 예외지만 해당 모델은 .bin)
+#
+# [2] torchvision 0.19.1 → 0.21.0
+#     이유: torch 2.6으로 업그레이드 후 torchvision::nms 연산자 미등록 오류.
+#           torch 버전과 torchvision 버전은 반드시 함께 맞춰야 함.
+#
+# [3] transformers 4.57.6 → 4.40.2
+#     이유: modelling_llama_open.py의 prepare_inputs_for_generation이
+#           구형 tuple-of-tuples past_key_values를 가정하는데, 4.44 이후
+#           transformers가 DynamicCache 객체를 기본으로 전달해 AttributeError 발생.
+#           4.40.x는 DynamicCache가 기본이 아닌 마지막 안정 구간.
+#
+# [4] litellm 1.85.1 → 1.35.38
+#     이유: jailbreakbench 1.0.0이 litellm.llms.prompt_templates.factory.custom_prompt
+#           를 임포트하는데, litellm 1.40 이후 해당 모듈 경로가 삭제됨.
+#
+# [5] judge 모델 패치: meta-llama/Llama-3-70b-chat-hf → Meta-Llama-3.1-70B-Instruct-Turbo
+#     이유: Together AI가 Llama-3-70b-chat-hf의 serverless 지원을 종료(400 model_not_available).
+#           run_jailbreak.py의 build_judge()에서 Llama3JailbreakJudge.LITELLM_MODEL을
+#           "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo"로 monkey-patch.
+#     (Meta-Llama-3.1-70B-Instruct-Turbo도 serverless 미지원 확인됨)
+# ─────────────────────────────────────────────────────────────────
+
+# PyTorch — CUDA 12.4 전용 휠로 설치 (pip install 시 아래 index-url 필요)
+# pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu124
+torch==2.6.0
+torchvision==0.21.0
+
+# 모델링 / 추론
+transformers==4.40.2
+accelerate>=0.30.0
+datasets>=2.19.0
+
+# JailbreakBench 및 judge
+jailbreakbench==1.0.0
+litellm==1.35.38
+
+# 유틸
+matplotlib>=3.8.0
+gdown>=5.2.0
+protobuf>=3.20.0

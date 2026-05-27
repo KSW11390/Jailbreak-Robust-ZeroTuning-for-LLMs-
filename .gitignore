@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+.DS_Store
+
+# Redundant per-rate JSON files (main sweep JSON covers all)
+outputs/jailbreak_sweep_results_rate*.json
+outputs/benign_sweep_results_rate*.json
+
+# Old intermediate ablation results
+outputs/ablation_results.json
+outputs/ablation_results_llama2.json
+outputs/ablation_gcg_llama2.png
+outputs/ablation_pair_llama2.png
+
+# HF cache
+.cache/
