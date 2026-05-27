@@ -184,4 +184,3 @@ python3 run_selective_zt.py \
 - ZeroTuning: [arxiv:2505.11739](https://arxiv.org/abs/2505.11739)
 - JailbreakBench: [arxiv:2404.01318](https://arxiv.org/abs/2404.01318)
 - Safety head detection (RDSHA/AHD): [arxiv:2508.19697](https://arxiv.org/abs/2508.19697)
-- PRS attack (Andriushchenko et al.): [arxiv:2404.01318](https://arxiv.org/abs/2404.01318)
